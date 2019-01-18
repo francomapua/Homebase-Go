@@ -219,6 +219,8 @@ func structs(){
 	fmt.Println(george.age) // 12
 	fmt.Println(george.BarkNameAndAge())
 	george.singAddress()
+
+	alice := person{name : "Alice", age : 12}
 }
 
 /*	POINTERS
@@ -227,6 +229,33 @@ func structs(){
 func pointers(){
 	i = 1;
 	// Continue later
+}
+
+/* METHOD RECEIVERS
+- attaches functions to structs to make them methods
+- can be pointer or non-pointer
+	- pointer functions can change the struct they are attached to
+*/
+type Mutatable struct{
+	a int
+	b int
+}
+func (m Mutatable) StayTheSame() {
+    m.a = 5
+    m.b = 7
+}
+func (m *Mutatable) Mutate() {
+    m.a = 5
+    m.b = 7
+}
+
+func methodReceivers(){
+	m := &Mutatable{0, 0}
+    fmt.Println(m) // {0,0}
+    m.StayTheSame()
+    fmt.Println(m) // {0,0}
+    m.Mutate()
+    fmt.Println(m) // {5, 7}
 }
 
 
