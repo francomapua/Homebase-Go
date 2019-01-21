@@ -3,6 +3,7 @@ package rotatinglogs
 import (
 	"os"
 	"sync"
+	"time"
 )
 
 // RotateWriter : Struct, please don't use this
@@ -22,6 +23,7 @@ func New(filename string) *RotateWriter {
 	return writer
 }
 
+// Write : writes a log to a file
 func (writer *RotateWriter) Write(output []byte) (bytesWritten int, err error) {
 	writer.lock.Lock()
 	defer writer.lock.Unlock()
@@ -29,7 +31,9 @@ func (writer *RotateWriter) Write(output []byte) (bytesWritten int, err error) {
 	return bytesWritten, err
 }
 
+// Rotate : archives and deletes files after a certain number of rotations
 func (writer *RotateWriter) Rotate() (err error) {
+
 	writer.lock.Lock()
 	defer writer.lock.Unlock()
 
@@ -43,10 +47,15 @@ func (writer *RotateWriter) Rotate() (err error) {
 	}
 
 	// Rename Dest File if it Exists
-	_, err = os.Stat(writer.filename)
-	if err == nil {
-
+	if _, err = os.Stat(writer.filename); !os.IsNotExist(err) {
+		err = os.Rename(writer.filename, writer.filename+"."+time.Now().Format(time.RFC3339))
+		if err != nil {
+			return err
+		}
 	}
+
+	// Delete the old files
 	// Create File
+	writer.fp, err = os.Create(writer.filename)
 	return err
 }

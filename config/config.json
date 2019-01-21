@@ -1,0 +1,9 @@
+{
+    "intField" : 123,
+    "stringField" : "one two three",
+    "objectField" : {
+        "one" : 1,
+        "two" : "2",
+        "three" : 3.3
+    }
+}
