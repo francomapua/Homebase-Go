@@ -114,7 +114,7 @@ func (mqc mqConnector) ensureQueue(queueName string) error {
 		}
 	}
 
-	queue, err := mqc.ch.QueueDeclare(
+	_, err := mqc.ch.QueueDeclare(
 		queueName, // name, leave empty to generate a unique name
 		true,      // durable
 		false,     // delete when usused
